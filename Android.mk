@@ -17,9 +17,10 @@ LOCAL_SRC_FILES += \
     main.cpp
 
 LOCAL_SHARED_LIBRARIES += \
-    android.hardware.keymaster@4.0 \
+    android.hardware.keymaster@4.1 \
     libbinder \
     libhidlbase \
+    libkeymaster4_1support \
     libkeymaster4support \
     libutils
 

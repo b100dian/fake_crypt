@@ -24,14 +24,16 @@
 #include <utility>
 
 #include <android-base/macros.h>
-#include <keymasterV4_0/Keymaster.h>
-#include <keymasterV4_0/authorization_set.h>
+#include <keymasterV4_1/Keymaster.h>
+#include <keymasterV4_1/authorization_set.h>
 
 namespace android {
 namespace vold {
 
 namespace km = ::android::hardware::keymaster::V4_0;
-using KmDevice = km::support::Keymaster;
+namespace km4 = ::android::hardware::keymaster::V4_0;
+namespace km41 = ::android::hardware::keymaster::V4_1;
+using KmDevice = km41::support::Keymaster;
 
 // C++ wrappers to the Keymaster hidl interface.
 // This is tailored to the needs of KeyStorage, but could be extended to be
@@ -118,7 +120,7 @@ class Keymaster {
     bool isSecure();
 
   private:
-    std::unique_ptr<KmDevice> mDevice;
+    ::android::sp<KmDevice> mDevice;
     DISALLOW_COPY_AND_ASSIGN(Keymaster);
     static bool hmacKeyGenerated;
 };

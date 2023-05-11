@@ -51,7 +51,7 @@ bool KeymasterOperation::updateCompletely(const char* input, size_t inputLen,
 
     while (inputConsumed != inputLen) {
         size_t toRead = static_cast<size_t>(inputLen - inputConsumed);
-        auto inputBlob = km::support::blob2hidlVec(
+        auto inputBlob = km4::support::blob2hidlVec(
             reinterpret_cast<const uint8_t*>(&input[inputConsumed]), toRead);
         auto error = mDevice->update(mOpHandle, hidl_vec<km::KeyParameter>(), inputBlob,
                                      km::HardwareAuthToken(), km::VerificationToken(), hidlCB);
@@ -144,10 +144,10 @@ bool Keymaster::generateKey(const km::AuthorizationSet& inParams, std::string* k
 
 km::ErrorCode Keymaster::exportKey(km::KeyFormat format, KeyBuffer& kmKey, const std::string& clientId,
                           const std::string& appData, std::string* key) {
-    auto kmKeyBlob = km::support::blob2hidlVec(std::string(kmKey.data(), kmKey.size()));
+    auto kmKeyBlob = km4::support::blob2hidlVec(std::string(kmKey.data(), kmKey.size()));
     auto emptyAssign = NULL;
-    auto kmClientId = (clientId == "!") ? emptyAssign: km::support::blob2hidlVec(clientId);
-    auto kmAppData = (appData == "!") ? emptyAssign: km::support::blob2hidlVec(appData);
+    auto kmClientId = (clientId == "!") ? emptyAssign: km4::support::blob2hidlVec(clientId);
+    auto kmAppData = (appData == "!") ? emptyAssign: km4::support::blob2hidlVec(appData);
     km::ErrorCode km_error;
     auto hidlCb = [&](km::ErrorCode ret, const hidl_vec<uint8_t>& exportedKeyBlob) {
         km_error = ret;
@@ -171,7 +171,7 @@ km::ErrorCode Keymaster::exportKey(km::KeyFormat format, KeyBuffer& kmKey, const
 bool Keymaster::deleteKey(const std::string& key) {
     LOG(ERROR) << "not actually deleting key\n";
     return true;
-    auto keyBlob = km::support::blob2hidlVec(key);
+    auto keyBlob = km4::support::blob2hidlVec(key);
     auto error = mDevice->deleteKey(keyBlob);
     if (!error.isOk()) {
         LOG(ERROR) << "delete_key failed: " << error.description();
@@ -186,7 +186,7 @@ bool Keymaster::deleteKey(const std::string& key) {
 
 bool Keymaster::upgradeKey(const std::string& oldKey, const km::AuthorizationSet& inParams,
                            std::string* newKey) {
-    auto oldKeyBlob = km::support::blob2hidlVec(oldKey);
+    auto oldKeyBlob = km4::support::blob2hidlVec(oldKey);
     km::ErrorCode km_error;
     auto hidlCb = [&](km::ErrorCode ret, const hidl_vec<uint8_t>& upgradedKeyBlob) {
         km_error = ret;
@@ -211,7 +211,7 @@ KeymasterOperation Keymaster::begin(km::KeyPurpose purpose, const std::string& k
                                     const km::AuthorizationSet& inParams,
                                     const km::HardwareAuthToken& authToken,
                                     km::AuthorizationSet* outParams) {
-    auto keyBlob = km::support::blob2hidlVec(key);
+    auto keyBlob = km4::support::blob2hidlVec(key);
     uint64_t mOpHandle;
     km::ErrorCode km_error;
 
